@@ -6,14 +6,56 @@ using System.Linq;
 using System.Media;
 using System.Threading.Channels;
 using static System.Net.Mime.MediaTypeNames;
-using NAudio.Wave;
+using System.Threading;
+
 
 int pos = 0;
 string keypress = "";
 
-
-    static void MainGame()
+    static async Task Loader(CancellationToken cancellationToken)
     {
+        string[] tips = new string[]
+        {
+            "TIP: 100% of players who choose Paper fear scissors.",
+            "TIP: If you keep losing, try picking a different option.",
+            "TIP: Scissors is technically two knives fastened together.",
+            "TIP: Winning gives you a higher win count than losing.",
+            "TIP: Paper is made from trees. Trees beat rock in nature (eventually).",
+            "TIP: If you keep losing, blame the garbage collector.",
+            "TIP: Paper covers Rock, but nobody knows how that actually damages the Rock.",
+            "TIP: Remember to drink water while waiting as long as 10 seconds for this loading screen to finish.",
+            "TIP: Maybe it's not your fault, have you tried buying a better gaming chair?",
+            "TIP: Cigánygyerek isnt a valid option",
+            "TIP: Compared to Csokonai, you are nothing",
+            "TIP: This is an Easter Egg",
+            
+
+        };
+        while (true)
+        {
+        Console.Clear();
+        Console.WriteLine("Loading...");
+        Console.WriteLine(tips[Random.Shared.Next(0, tips.Length)]);
+        await Task.Delay(2000);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        await Task.Delay(1000, cancellationToken);
+        }
+    }
+
+    static async Task MainGame()
+    {
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(Random.Shared.Next(5, 11)));
+
+    try 
+    {
+        await Loader(cts.Token);
+    }
+    catch (OperationCanceledException)
+    {
+        Console.Clear();
+    }
+
         string keypress = "";
         int intpos = 0;
         int botch;
@@ -21,7 +63,7 @@ string keypress = "";
         int pscore = 0;
 
         Console.Clear();
-        List<string> elements = new List<string> { "Kő", "Papír", "Olló" };
+        List<string> elements = new List<string> { "Rock", "Paper", "Scissors" };
         while (true)
         {
             int pos = 0;
@@ -30,30 +72,38 @@ string keypress = "";
                 Console.Clear();
 
 
-                Console.WriteLine($"Kő papír olló...            [Bot: {bscore} || Te: {pscore}]");
+                Console.WriteLine($"Rock Paper Scissors...            [Bot: {bscore} || You: {pscore}]");
 
 
 
                 if (intpos == 0)
                 {
-                    Console.WriteLine("\x1b[1;45m|Kő|\x1b[0m |Papír| |Olló|");
+                    Console.WriteLine("\x1b[1;45m|Rock|\x1b[0m |Paper| |Scissors|");
                 }
                 else if (intpos == 1)
                 {
-                    Console.WriteLine("|Kő| \x1b[1;45m|Papír|\x1b[0m |Olló|");
+                    Console.WriteLine("|Rock| \x1b[1;45m|Paper|\x1b[0m |Scissors|");
                 }
                 else if (intpos == 2)
                 {
-                    Console.WriteLine("|Kő| |Papír| \x1b[1;45m|Olló|\x1b[0m");
+                    Console.WriteLine("|Rock| |Paper| \x1b[1;45m|Scissors|\x1b[0m");
                 }
                 ConsoleKey key = Console.ReadKey(true).Key;
                 keypress = key.ToString();
+                        if (keypress != "Enter")
+                            {
+                                Console.Beep(400, 50); 
+                            }
+                        else
+                            {
+                                Console.Beep(784, 150); 
+                            }
                 if (keypress == "LeftArrow")
                 {
                     intpos--;
                     if (intpos < 0)
                     {
-                        intpos = 0;
+                        intpos = 2;
                     }
                 }
                 if (keypress == "RightArrow")
@@ -61,7 +111,7 @@ string keypress = "";
                     intpos++;
                     if (intpos > 2)
                     {
-                        intpos = 2;
+                        intpos = 0;
                     }
                 }
                 if (keypress == "Enter")
@@ -93,8 +143,8 @@ string keypress = "";
                 Console.WriteLine("Vesztettél");
                 bscore++;
             }
-            Console.WriteLine($"Bot választása: {elements[botch]}");
-            Console.WriteLine($"Nyomj bármilyen gombot a folytatáshoz vay a Q -t a kilépéshez");
+            Console.WriteLine($"Bot choice: {elements[botch]}");
+            Console.WriteLine($"Press any key to continue or Q to exit");
             char exit = Console.ReadKey(true).KeyChar;
 
             if (char.ToLower(exit) == 'q')
@@ -106,24 +156,42 @@ string keypress = "";
         }
     }
 
+        // Console.Beep(523, 150); 
+        // Console.Beep(659, 150); 
+        // Console.Beep(784, 150); 
+        // Console.Beep(1046, 300); 
     while (true)
     {
-        Console.WriteLine(keypress);
+        
         Console.Clear();
+        Console.WriteLine("""                                                                                                                          
+┌──────────────────────────────────┐
+│     ROCK - PAPER - SCISSORS      │
+└──────────────────────────────────┘
+
+""");
         if (pos == 0)
         {
-            Console.WriteLine("> játék");
-            Console.WriteLine("  kilépés");
+            Console.WriteLine("         > [ P L A Y ] <");
+            Console.WriteLine("           [ E X I T ] ");
         }
 
         if (pos == 1)
         {
-            Console.WriteLine("  játék");
-            Console.WriteLine("> kilépés");
+            Console.WriteLine("           [ P L A Y ] ");
+            Console.WriteLine("         > [ E X I T ] <");
         }
 
         ConsoleKey key = Console.ReadKey(true).Key;
         keypress = key.ToString();
+        if (keypress != "Enter")
+        {
+            Console.Beep(400, 50); 
+        }
+        else
+        {
+            Console.Beep(784, 150); 
+        }
 
         if (keypress == "DownArrow")
         {
@@ -139,7 +207,7 @@ string keypress = "";
             pos--;
             if (pos < 0)
             {
-                pos = 0;
+                pos = 1;
             }
 
 
@@ -147,13 +215,16 @@ string keypress = "";
 
         if (pos == 0 && keypress == "Enter")
         {
-            MainGame();
+            await MainGame();
+            
         }
         if (pos == 1 && keypress == "Enter")
         {
             break;
         }
     }
+
+
 
 
 
