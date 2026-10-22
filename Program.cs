@@ -36,10 +36,10 @@ string keypress = "";
         Console.Clear();
         Console.WriteLine("Loading...");
         Console.WriteLine(tips[Random.Shared.Next(0, tips.Length)]);
-        await Task.Delay(2000);
+        
         cancellationToken.ThrowIfCancellationRequested();
 
-        await Task.Delay(1000, cancellationToken);
+        await Task.Delay(3000, cancellationToken);
         }
     }
 
