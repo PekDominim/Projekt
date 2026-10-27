@@ -1,22 +1,117 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Media;
-using System.Threading.Channels;
-using static System.Net.Mime.MediaTypeNames;
-using System.Threading;
+﻿using System.Text.Json;
+
+Outcome outcome = new Outcome();
 
 
-int pos = 0;
-string keypress = "";
+static void BootAnimation()
+{
 
-    static async Task Loader(CancellationToken cancellationToken)
+
+    Console.Clear();
+    Console.CursorVisible = false;
+    List<int> sound1 = new List<int> { 523, 659, 784, 1046 };
+    List<int> sound2 = new List<int> { 150, 150, 150, 300 };
+    List<string> text = new List<string> { " ",
+                                        """██████╗  ██████╗  ██████╗██╗  ██╗    ██████╗  █████╗ ██████╗  █████╗ ███████╗██████╗     ███████╗ ██████╗██╗███████╗███████╗ ██████╗ ██████╗ ███████╗""",
+                                        """██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝    ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗    ██╔════╝██╔════╝██║██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝""",
+                                        """██████╔╝██║   ██║██║     █████╔╝     ██████╔╝███████║██████╔╝███████║█████╗  ██████╔╝    ███████╗██║     ██║███████╗███████╗██║   ██║██████╔╝███████╗""",
+                                        """██╔══██╗██║   ██║██║     ██╔═██╗     ██╔═══╝ ██╔══██║██╔═══╝ ██╔══██║██╔══╝  ██╔══██╗    ╚════██║██║     ██║╚════██║╚════██║██║   ██║██╔══██╗╚════██║""",
+                                        """██║  ██║╚██████╔╝╚██████╗██║  ██╗    ██║     ██║  ██║██║     ██║  ██║███████╗██║  ██║    ███████║╚██████╗██║███████║███████║╚██████╔╝██║  ██║███████║""",
+                                        """╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝    ╚═╝     ╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝ ╚═════╝╚═╝╚══════╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝""",
+                                        " " };
+
+
+
+
+
+
+    for (int i = 0; i < sound1.Count; i++)
     {
-        string[] tips = new string[]
+        Console.WriteLine(text[i * 2]);
+        Console.WriteLine(text[i * 2 + 1]);
+        Console.Beep(sound1[i], sound2[i]);
+    }
+    Console.Beep(775, 800);
+}
+
+static int Mode()
+{
+    int pos = 0;
+    string keypress = "";
+    while (true)
+    {
+
+        Console.Clear();
+        Console.WriteLine("""                                                                                                                          
+┌──────────────────────────────────┐
+│     ROCK - PAPER - SCISSORS      │
+└──────────────────────────────────┘
+
+""");
+        if (pos == 0)
         {
-            "TIP: 100% of players who choose Paper fear scissors.",
+            Rowcolor.Yellow("        > [ T3P ] <");
+            Rowcolor.White("           [ T5P ] ");
+            Rowcolor.White("           [ FREE PLAY ] ");
+        }
+
+        if (pos == 1)
+        {
+            Rowcolor.White("           [ T3P ] ");
+            Rowcolor.Yellow("        > [ T5P ] <");
+            Rowcolor.White("           [ FREE PLAY ] ");
+        }
+
+        if (pos == 2)
+        {
+            Rowcolor.White("           [ T3P ] ");
+            Rowcolor.White("           [ T5P ] ");
+            Rowcolor.Yellow("        > [ FREE PLAY ] <");
+        }
+
+        ConsoleKey key = Console.ReadKey(true).Key;
+        keypress = key.ToString();
+        if (keypress != "Enter")
+        {
+            Console.Beep(400, 50);
+        }
+        else
+        {
+            Console.Beep(784, 150);
+        }
+
+        if (keypress == "DownArrow")
+        {
+            pos++;
+            if (pos > 2)
+            {
+                pos = 0;
+            }
+
+        }
+        if (keypress == "UpArrow")
+        {
+            pos--;
+            if (pos < 0)
+            {
+                pos = 2;
+            }
+
+
+        }
+
+        if (keypress == "Enter")
+        {
+            return pos;
+        }
+    }
+}
+
+static async Task Loader()
+{
+    string[] tips =
+    [
+        "TIP: 100% of players who choose Paper fear scissors.",
             "TIP: If you keep losing, try picking a different option.",
             "TIP: Scissors is technically two knives fastened together.",
             "TIP: Winning gives you a higher win count than losing.",
@@ -28,154 +123,253 @@ string keypress = "";
             "TIP: Cigánygyerek isnt a valid option",
             "TIP: Compared to Csokonai, you are nothing",
             "TIP: This is an Easter Egg",
-            
 
-        };
-        while (true)
-        {
+
+        ];
+    string[] dots = [
+        ".",
+            "..",
+            "...",
+            "....",
+            "....."
+    ];
+    int dotnum = 0;
+    int mscounter = 0;
+    int tipnum = Random.Shared.Next(0, tips.Length);
+    int dottime = 300; // Must be divisible by 3000
+    int loadtime = Random.Shared.Next(6000, 11000);
+
+    while (true)
+    {
         Console.Clear();
-        Console.WriteLine("Loading...");
-        Console.WriteLine(tips[Random.Shared.Next(0, tips.Length)]);
-        await Task.Delay(2000);
-        cancellationToken.ThrowIfCancellationRequested();
-
-        await Task.Delay(1000, cancellationToken);
+        dotnum++;
+        if (dotnum > 4)
+        {
+            dotnum = 0;
         }
+        Console.WriteLine($"Loading{dots[dotnum]}");
+        if (mscounter % 3000 == 0)
+        {
+            tipnum = Random.Shared.Next(0, tips.Length);
+        }
+        Console.WriteLine(tips[tipnum]);
+        mscounter += dottime;
+        await Task.Delay(dottime);
+        if (mscounter >= loadtime)
+        {
+            break;
+        }
+
+
     }
+}
 
-    static async Task MainGame()
+void DataLogger(int modechoice, int bscore, int pscore)
+{
+    string whowon = "";
+    if (bscore > pscore)
     {
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(Random.Shared.Next(5, 11)));
-
-    try 
-    {
-        await Loader(cts.Token);
+        whowon = "Lost";
     }
-    catch (OperationCanceledException)
+    else
     {
-        Console.Clear();
+        whowon = "Won";
     }
+    string mode = "";
+    if (modechoice == 0)
+    {
+        mode = "To 3 Points";
+    }
+    else if (modechoice == 1)
+    {
+        mode = "To 5 Points";
+    }
+    string result = $"[{DateTime.Now}] Mode: {mode} | Bot Score: {bscore} | Player Score: {pscore} | Result: {whowon}";
+    outcome.Outcomes.Add(result);
+}
 
-        string keypress = "";
-        int intpos = 0;
-        int botch;
-        int bscore = 0;
-        int pscore = 0;
+async Task MainGame(int modechoice)
+{
 
-        Console.Clear();
-        List<string> elements = new List<string> { "Rock", "Paper", "Scissors" };
+
+    string keypress = "";
+    int intpos = 0;
+    int botch;
+    int bscore = 0;
+    int pscore = 0;
+
+    Console.Clear();
+    List<string> elements = new List<string> { "Rock", "Paper", "Scissors" };
+    while (true)
+    {
+        int pos = 0;
         while (true)
         {
-            int pos = 0;
-            while (true)
+            Console.Clear();
+
+
+            Console.WriteLine($"Rock Paper Scissors...            [Bot: {bscore} || You: {pscore}]");
+
+
+
+            if (intpos == 0)
             {
-                Console.Clear();
-
-
-                Console.WriteLine($"Rock Paper Scissors...            [Bot: {bscore} || You: {pscore}]");
-
-
-
-                if (intpos == 0)
-                {
-                    Console.WriteLine("\x1b[1;45m|Rock|\x1b[0m |Paper| |Scissors|");
-                }
-                else if (intpos == 1)
-                {
-                    Console.WriteLine("|Rock| \x1b[1;45m|Paper|\x1b[0m |Scissors|");
-                }
-                else if (intpos == 2)
-                {
-                    Console.WriteLine("|Rock| |Paper| \x1b[1;45m|Scissors|\x1b[0m");
-                }
-                ConsoleKey key = Console.ReadKey(true).Key;
-                keypress = key.ToString();
-                        if (keypress != "Enter")
-                            {
-                                Console.Beep(400, 50); 
-                            }
-                        else
-                            {
-                                Console.Beep(784, 150); 
-                            }
-                if (keypress == "LeftArrow")
-                {
-                    intpos--;
-                    if (intpos < 0)
-                    {
-                        intpos = 2;
-                    }
-                }
-                if (keypress == "RightArrow")
-                {
-                    intpos++;
-                    if (intpos > 2)
-                    {
-                        intpos = 0;
-                    }
-                }
-                if (keypress == "Enter")
-                {
-                    break;
-                }
+                Console.WriteLine("\x1b[1;45m|Rock|\x1b[0m |Paper| |Scissors|");
             }
-
-
-
-            botch = Random.Shared.Next(3);
-
-
-
-
-            if (botch == intpos)
+            else if (intpos == 1)
             {
-                Console.WriteLine("Döntetlen");
+                Console.WriteLine("|Rock| \x1b[1;45m|Paper|\x1b[0m |Scissors|");
             }
-            else if ((intpos == 0 && botch == 2) ||
-                     (intpos == 1 && botch == 0) ||
-                     (intpos == 2 && botch == 1))
+            else if (intpos == 2)
             {
-                Console.WriteLine("Nyertél");
-                pscore++;
+                Console.WriteLine("|Rock| |Paper| \x1b[1;45m|Scissors|\x1b[0m");
+            }
+            ConsoleKey key = Console.ReadKey(true).Key;
+            keypress = key.ToString();
+            if (keypress != "Enter")
+            {
+                Console.Beep(400, 50);
             }
             else
             {
-                Console.WriteLine("Vesztettél");
-                bscore++;
+                Console.Beep(784, 150);
             }
-            Console.WriteLine($"Bot choice: {elements[botch]}");
-            Console.WriteLine($"Press any key to continue or Q to exit");
-            char exit = Console.ReadKey(true).KeyChar;
-
-            if (char.ToLower(exit) == 'q')
+            if (keypress == "LeftArrow")
             {
-                Console.Beep(300, 150);
+                intpos--;
+                if (intpos < 0)
+                {
+                    intpos = 2;
+                }
+            }
+            if (keypress == "RightArrow")
+            {
+                intpos++;
+                if (intpos > 2)
+                {
+                    intpos = 0;
+                }
+            }
+            if (keypress == "Enter")
+            {
                 break;
             }
-
-
         }
-    }
 
-        List<int> sound1= new List<int>{523, 659, 784, 1046};
-        List<int> sound2= new List<int>{150, 150, 150, 300};
-        List<string> text= new List<string>{" ","""██████╗  ██████╗  ██████╗██╗  ██╗    ██████╗  █████╗ ██████╗  █████╗ ███████╗██████╗     ███████╗ ██████╗██╗███████╗███████╗ ██████╗ ██████╗ ███████╗""","""██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝    ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗    ██╔════╝██╔════╝██║██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝""","""██████╔╝██║   ██║██║     █████╔╝     ██████╔╝███████║██████╔╝███████║█████╗  ██████╔╝    ███████╗██║     ██║███████╗███████╗██║   ██║██████╔╝███████╗""","""██╔══██╗██║   ██║██║     ██╔═██╗     ██╔═══╝ ██╔══██║██╔═══╝ ██╔══██║██╔══╝  ██╔══██╗    ╚════██║██║     ██║╚════██║╚════██║██║   ██║██╔══██╗╚════██║""","""██║  ██║╚██████╔╝╚██████╗██║  ██╗    ██║     ██║  ██║██║     ██║  ██║███████╗██║  ██║    ███████║╚██████╗██║███████║███████║╚██████╔╝██║  ██║███████║""","""╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝    ╚═╝     ╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝ ╚═════╝╚═╝╚══════╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝"""," "};
 
+
+        botch = Random.Shared.Next(3);
 
 
 
 
-
-        for (int i = 0; i < sound1.Count; i++)
+        if (botch == intpos)
         {
-            Console.WriteLine(text[i*2]);
-            Console.WriteLine(text[i*2+1]);
-            Console.Beep(sound1[i], sound2[i]);
+            Rowcolor.Gray("Tie");
         }
-        Console.Beep(775, 800);
+        else if ((intpos == 0 && botch == 2) ||
+                 (intpos == 1 && botch == 0) ||
+                 (intpos == 2 && botch == 1))
+        {
+            Rowcolor.Green("You won");
+            pscore++;
+        }
+        else
+        {
+            Rowcolor.Red("You lost");
+            bscore++;
+        }
+        Console.WriteLine($"Bot choice: {elements[botch]}");
+        Console.WriteLine($"Press any key to continue or Q to exit");
+        char exit = Console.ReadKey(true).KeyChar;
+
+        if (modechoice == 0 && (bscore == 3 || pscore == 3))
+        {
+            if (bscore == 3)
+            {
+                Console.Clear();
+                Rowcolor.Red("You lost! Bot reached 3 points first.");
+                Console.Beep(587, 300);
+                Console.Beep(554, 300);
+                Console.Beep(523, 300);
+                Console.Beep(494, 600);
+            }
+            else
+            {
+                Console.Clear();
+                Rowcolor.Green("You won! You reached 3 points first.");
+                Console.Beep(659, 120);
+                Console.Beep(784, 120);
+                Console.Beep(659, 120);
+                Console.Beep(880, 180);
+                Console.Beep(1046, 300);
+            }
+            DataLogger(modechoice, bscore, pscore);
+            Console.WriteLine("Press any key to exit to main menu...");
+            Console.ReadKey(true);
+            break;
+        }
+
+        else if (modechoice == 1 && (bscore == 5 || pscore == 5))
+        {
+            if (bscore == 5)
+            {
+                Console.Clear();
+                Rowcolor.Red("You lost! Bot reached 5 points first.");
+                Console.Beep(587, 300);
+                Console.Beep(554, 300);
+                Console.Beep(523, 300);
+                Console.Beep(494, 600);
+            }
+            else
+            {
+                Console.Clear();
+                Rowcolor.Green("You won! You reached 5 points first.");
+                Console.Beep(659, 120);
+                Console.Beep(784, 120);
+                Console.Beep(659, 120);
+                Console.Beep(880, 180);
+                Console.Beep(1046, 300);
+            }
+            DataLogger(modechoice, bscore, pscore);
+            Console.WriteLine("Press any key to exit to main menu...");
+            Console.ReadKey(true);
+            break;
+        }
+
+        
+
+        if (char.ToLower(exit) == 'q')
+        {
+            Console.Beep(300, 150);
+            break;
+        }
+
+
+    }
+}
+
+void stats()
+{
+    Console.Clear();
+    Console.WriteLine("Game results:");
+    for (int i = outcome.Outcomes.Count-1; i >= 0; i--)
+    {
+        Console.WriteLine(outcome.Outcomes[i]);
+    }
+    Console.WriteLine("Press any key to exit to main menu...");
+    Console.ReadKey(true);
+    
+}
+
+void MainMenu()
+{
+    int pos = 0;
+    string keypress = "";
+
     while (true)
     {
-        
+
         Console.Clear();
         Console.WriteLine("""                                                                                                                          
 ┌──────────────────────────────────┐
@@ -185,59 +379,104 @@ string keypress = "";
 """);
         if (pos == 0)
         {
-            Console.WriteLine("         > [ P L A Y ] <");
-            Console.WriteLine("           [ E X I T ] ");
+            Rowcolor.Yellow("        > [ P L A Y ] <");
+            Rowcolor.White("          [ S T A T S ] ");
+            Rowcolor.White("          [ E X I T ] ");
         }
 
         if (pos == 1)
         {
-            Console.WriteLine("           [ P L A Y ] ");
-            Console.WriteLine("         > [ E X I T ] <");
+            Rowcolor.White("          [ P L A Y ] ");
+            Rowcolor.Yellow("        > [ S T A T S ] <");
+            Rowcolor.White("          [ E X I T ] ");
         }
 
-        ConsoleKey key = Console.ReadKey(true).Key;
-        keypress = key.ToString();
-        if (keypress != "Enter")
+        if (pos == 2)
         {
-            Console.Beep(400, 50); 
+            Rowcolor.White("          [ P L A Y ] ");
+            Rowcolor.White("          [ S T A T S ] ");
+            Rowcolor.Yellow("        > [ E X I T ] <");
         }
-        else
-        {
-            Console.Beep(784, 150); 
-        }
+    
 
-        if (keypress == "DownArrow")
-        {
-            pos++;
-            if (pos > 1)
-            {
-                pos = 0;
-            }
-
-        }
-        if (keypress == "UpArrow")
-        {
-            pos--;
-            if (pos < 0)
-            {
-                pos = 1;
-            }
-
-
-        }
-
-        if (pos == 0 && keypress == "Enter")
-        {
-            await MainGame();
-            
-        }
-        if (pos == 1 && keypress == "Enter")
-        {
-            break;
-        }
+    ConsoleKey key = Console.ReadKey(true).Key;
+    keypress = key.ToString();
+    if (keypress != "Enter")
+    {
+        Console.Beep(400, 50);
+    }
+    else
+    {
+        Console.Beep(784, 150);
     }
 
+    if (keypress == "DownArrow")
+    {
+        pos++;
+        if (pos > 2)
+        {
+            pos = 0;
+        }
+
+    }
+    if (keypress == "UpArrow")
+    {
+        pos--;
+        if (pos < 0)
+        {
+            pos = 2;
+        }
 
 
+    }
+
+    if (pos == 0 && keypress == "Enter")
+    {
+        break;
+
+    }
+    if (pos == 1 && keypress == "Enter")
+    {
+        stats();
+    }
+    if (pos == 2 && keypress == "Enter")
+    {
+        Console.Clear();
+        Environment.Exit(0);
+    }
+}
+}
+Console.Title = "Rock Paper Scissors";
+
+string statfilelocation = "stats.json";
+
+if (File.Exists(statfilelocation))
+{
+    string json = File.ReadAllText(statfilelocation);
+    outcome = JsonSerializer.Deserialize<Outcome>(json)?? new Outcome();
+}
+
+
+int modechoice = 0;
+
+BootAnimation();
+while (true)
+{
+    File.WriteAllText(statfilelocation, JsonSerializer.Serialize(outcome));
+    MainMenu();
+    modechoice = Mode();
+    await Loader();
+    while (Console.KeyAvailable)
+    {
+        Console.ReadKey(true);
+    }
+    await MainGame(modechoice);
+}
+
+
+public class Outcome
+{
+    public List<string> Outcomes { get; set; } = new();
+}
 
 

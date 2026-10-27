@@ -7,10 +7,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="NAudio" Version="3.3.0" />
-    <PackageReference Include="System.Windows.Extensions" Version="8.0.0" />
-  </ItemGroup>
+
 
 
 </Project>
