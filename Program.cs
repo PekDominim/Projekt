@@ -50,23 +50,23 @@ static int Mode()
 """);
         if (pos == 0)
         {
-            Rowcolor.Yellow("        > [ T3P ] <");
-            Rowcolor.White("           [ T5P ] ");
+            Rowcolor.Yellow("            > [ T3P ] <");
+            Rowcolor.White("              [ T5P ] ");
             Rowcolor.White("           [ FREE PLAY ] ");
         }
 
         if (pos == 1)
         {
-            Rowcolor.White("           [ T3P ] ");
-            Rowcolor.Yellow("        > [ T5P ] <");
+            Rowcolor.White("              [ T3P ] ");
+            Rowcolor.Yellow("            > [ T5P ] <");
             Rowcolor.White("           [ FREE PLAY ] ");
         }
 
         if (pos == 2)
         {
-            Rowcolor.White("           [ T3P ] ");
-            Rowcolor.White("           [ T5P ] ");
-            Rowcolor.Yellow("        > [ FREE PLAY ] <");
+            Rowcolor.White("              [ T3P ] ");
+            Rowcolor.White("              [ T5P ] ");
+            Rowcolor.Yellow("         > [ FREE PLAY ] <");
         }
 
         ConsoleKey key = Console.ReadKey(true).Key;
@@ -380,21 +380,21 @@ void MainMenu()
         if (pos == 0)
         {
             Rowcolor.Yellow("        > [ P L A Y ] <");
-            Rowcolor.White("          [ S T A T S ] ");
+            Rowcolor.White("         [ S T A T S ] ");
             Rowcolor.White("          [ E X I T ] ");
         }
 
         if (pos == 1)
         {
             Rowcolor.White("          [ P L A Y ] ");
-            Rowcolor.Yellow("        > [ S T A T S ] <");
+            Rowcolor.Yellow("       > [ S T A T S ] <");
             Rowcolor.White("          [ E X I T ] ");
         }
 
         if (pos == 2)
         {
             Rowcolor.White("          [ P L A Y ] ");
-            Rowcolor.White("          [ S T A T S ] ");
+            Rowcolor.White("         [ S T A T S ] ");
             Rowcolor.Yellow("        > [ E X I T ] <");
         }
     
