@@ -418,23 +418,23 @@ void MainMenu()
 """);
         if (pos == 0)
         {
-            Rowcolor.Yellow("        > [ P L A Y ] <");
-            Rowcolor.White("         [ S T A T S ] ");
-            Rowcolor.White("          [ E X I T ] ");
+            Rowcolor.Yellow("          > [ P L A Y ] < ");
+            Rowcolor.White("           [ S T A T S ] ");
+            Rowcolor.White("            [ E X I T ] ");
         }
 
         if (pos == 1)
         {
-            Rowcolor.White("          [ P L A Y ] ");
-            Rowcolor.Yellow("       > [ S T A T S ] <");
-            Rowcolor.White("          [ E X I T ] ");
+            Rowcolor.White("            [ P L A Y ] ");
+            Rowcolor.Yellow("         > [ S T A T S ] <");
+            Rowcolor.White("            [ E X I T ] ");
         }
 
         if (pos == 2)
         {
-            Rowcolor.White("          [ P L A Y ] ");
-            Rowcolor.White("         [ S T A T S ] ");
-            Rowcolor.Yellow("        > [ E X I T ] <");
+            Rowcolor.White("            [ P L A Y ] ");
+            Rowcolor.White("           [ S T A T S ] ");
+            Rowcolor.Yellow("          > [ E X I T ] <");
         }
 
 
