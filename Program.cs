@@ -500,6 +500,7 @@ if (File.Exists(statfilelocation))
 
 int modechoice = 0;
 
+Console.SetWindowSize(150, 30);
 BootAnimation();
 while (true)
 {
