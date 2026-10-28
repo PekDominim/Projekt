@@ -202,7 +202,6 @@ async Task MainGame(int modechoice)
     List<string> elements = new List<string> { "Rock", "Paper", "Scissors" };
     while (true)
     {
-        int pos = 0;
         while (true)
         {
             Console.Clear();
@@ -288,7 +287,7 @@ async Task MainGame(int modechoice)
             if (bscore == 3)
             {
                 Console.Clear();
-                Rowcolor.Red("You lost! Bot reached 3 points first.");
+                Rowcolor.Red("You lost! The Bot reached 3 points first.");
                 Console.Beep(587, 300);
                 Console.Beep(554, 300);
                 Console.Beep(523, 300);
@@ -307,6 +306,7 @@ async Task MainGame(int modechoice)
             DataLogger(modechoice, bscore, pscore);
             Console.WriteLine("Press any key to exit to main menu...");
             Console.ReadKey(true);
+            Console.Beep(784, 150);
             break;
         }
 
@@ -315,7 +315,7 @@ async Task MainGame(int modechoice)
             if (bscore == 5)
             {
                 Console.Clear();
-                Rowcolor.Red("You lost! Bot reached 5 points first.");
+                Rowcolor.Red("You lost! The Bot reached 5 points first.");
                 Console.Beep(587, 300);
                 Console.Beep(554, 300);
                 Console.Beep(523, 300);
@@ -334,10 +334,11 @@ async Task MainGame(int modechoice)
             DataLogger(modechoice, bscore, pscore);
             Console.WriteLine("Press any key to exit to main menu...");
             Console.ReadKey(true);
+            Console.Beep(784, 150);
             break;
         }
 
-        
+
 
         if (char.ToLower(exit) == 'q')
         {
@@ -353,14 +354,52 @@ void stats()
 {
     Console.Clear();
     Console.WriteLine("Game results:");
-    for (int i = outcome.Outcomes.Count-1; i >= 0; i--)
+    for (int i = outcome.Outcomes.Count - 1; i >= 0; i--)
     {
         Console.WriteLine(outcome.Outcomes[i]);
     }
-    Console.WriteLine("Press any key to exit to main menu...");
-    Console.ReadKey(true);
-    
-}
+    Console.WriteLine("Press any key to exit to main menu or Delete to clear stats...");
+    ConsoleKey key = Console.ReadKey(true).Key;
+    if (key == ConsoleKey.Delete)
+    {
+        Console.Clear();
+        Rowcolor.DarkRed("Don't run from your past!");
+        Rowcolor.Red("[ Press 'Delete' to Accept Oblivion ]");
+        Rowcolor.Gray("[ Press 'Any other button' to Face It ]");
+        key = Console.ReadKey(true).Key;
+        if (key == ConsoleKey.Delete)
+        {
+            outcome.Outcomes.Clear();
+            File.WriteAllText("stats.json", JsonSerializer.Serialize(outcome));
+            Console.Clear();
+            Console.Beep(220, 400);
+            Task.Delay(600).Wait();
+            Console.Write("Now ");
+            Task.Delay(600).Wait();
+            Console.Write("go. ");
+            Task.Delay(1000).Wait();
+            Console.Write("Pretend, ");
+            Task.Delay(600).Wait();
+            Console.Write("it ");
+            Task.Delay(600).Wait();
+            Console.Write("never ");
+            Task.Delay(600).Wait();
+            Console.Write("happened.");
+            Task.Delay(1500).Wait();
+        }
+        else
+        {
+            Console.Beep(523, 80);
+            Console.Beep(659, 120);
+        }
+    }
+    else
+        {
+            Console.Beep(400, 50);
+        }
+    }
+
+
 
 void MainMenu()
 {
@@ -397,54 +436,56 @@ void MainMenu()
             Rowcolor.White("         [ S T A T S ] ");
             Rowcolor.Yellow("        > [ E X I T ] <");
         }
-    
 
-    ConsoleKey key = Console.ReadKey(true).Key;
-    keypress = key.ToString();
-    if (keypress != "Enter")
-    {
-        Console.Beep(400, 50);
-    }
-    else
-    {
-        Console.Beep(784, 150);
-    }
 
-    if (keypress == "DownArrow")
-    {
-        pos++;
-        if (pos > 2)
+        ConsoleKey key = Console.ReadKey(true).Key;
+        keypress = key.ToString();
+        if (keypress != "Enter")
         {
-            pos = 0;
+            Console.Beep(400, 50);
+        }
+        else
+        {
+            Console.Beep(784, 150);
         }
 
-    }
-    if (keypress == "UpArrow")
-    {
-        pos--;
-        if (pos < 0)
+        if (keypress == "DownArrow")
         {
-            pos = 2;
+            pos++;
+            if (pos > 2)
+            {
+                pos = 0;
+            }
+
+        }
+        if (keypress == "UpArrow")
+        {
+            pos--;
+            if (pos < 0)
+            {
+                pos = 2;
+            }
+
+
         }
 
+        if (pos == 0 && keypress == "Enter")
+        {
+            break;
 
+        }
+        if (pos == 1 && keypress == "Enter")
+        {
+            stats();
+        }
+        if (pos == 2 && keypress == "Enter")
+        {
+            Console.Clear();
+            Console.Beep(350, 100);
+            Console.Beep(250, 150);
+            Environment.Exit(0);
+        }
     }
-
-    if (pos == 0 && keypress == "Enter")
-    {
-        break;
-
-    }
-    if (pos == 1 && keypress == "Enter")
-    {
-        stats();
-    }
-    if (pos == 2 && keypress == "Enter")
-    {
-        Console.Clear();
-        Environment.Exit(0);
-    }
-}
 }
 Console.Title = "Rock Paper Scissors";
 
@@ -453,7 +494,7 @@ string statfilelocation = "stats.json";
 if (File.Exists(statfilelocation))
 {
     string json = File.ReadAllText(statfilelocation);
-    outcome = JsonSerializer.Deserialize<Outcome>(json)?? new Outcome();
+    outcome = JsonSerializer.Deserialize<Outcome>(json) ?? new Outcome();
 }
 
 
