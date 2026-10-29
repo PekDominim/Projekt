@@ -353,6 +353,18 @@ async Task MainGame(int modechoice)
 void stats()
 {
     Console.Clear();
+    if (outcome.Outcomes.Count == 0)
+    {
+        Rowcolor.Gray("No stats to show yet.");
+        Console.WriteLine("Press any key to exit to main menu...");
+        Console.ReadKey(true);
+        Console.Beep(784, 150);
+        return;
+    }
+    else
+    {
+        
+    
     Console.WriteLine("Game results:");
     for (int i = outcome.Outcomes.Count - 1; i >= 0; i--)
     {
@@ -363,6 +375,7 @@ void stats()
     if (key == ConsoleKey.Delete)
     {
         Console.Clear();
+        Console.Beep(220, 400);
         Rowcolor.DarkRed("Don't run from your past!");
         Rowcolor.Red("[ Press 'Delete' to Accept Oblivion ]");
         Rowcolor.Gray("[ Press 'Any other button' to Face It ]");
@@ -372,7 +385,7 @@ void stats()
             outcome.Outcomes.Clear();
             File.WriteAllText("stats.json", JsonSerializer.Serialize(outcome));
             Console.Clear();
-            Console.Beep(220, 400);
+            Console.Beep(180, 400);
             Task.Delay(600).Wait();
             Console.Write("Now ");
             Task.Delay(600).Wait();
@@ -395,9 +408,11 @@ void stats()
     }
     else
         {
-            Console.Beep(400, 50);
+            Console.Beep(784, 150);
         }
     }
+}
+
 
 
 
