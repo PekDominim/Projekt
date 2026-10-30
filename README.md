@@ -24,3 +24,7 @@ Indeed, It's Rock Paper Scissors
 * SOUND: Similar to an Opel Astra
 * PHERIPHERIAL: 75% Keyboard, Good gaming chair
 
+## Features:
+* 3 whole gamemodes: T3P T5P and Free Play
+* Intuitive and User friendly UI
+* ...and much more...
