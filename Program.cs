@@ -366,10 +366,11 @@ void stats()
         
     
     Console.WriteLine("Game results:");
-    for (int i = outcome.Outcomes.Count - 1; i >= 0; i--)
+    for (int i = 0; i < outcome.Outcomes.Count; i++)
     {
         Console.WriteLine(outcome.Outcomes[i]);
     }
+    Console.WriteLine();
     Console.WriteLine("Press any key to exit to main menu or Delete to clear stats...");
     ConsoleKey key = Console.ReadKey(true).Key;
     if (key == ConsoleKey.Delete)
