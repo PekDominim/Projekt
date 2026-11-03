@@ -19,17 +19,84 @@ static void BootAnimation()
                                         """██║  ██║╚██████╔╝╚██████╗██║  ██╗    ██║     ██║  ██║██║     ██║  ██║███████╗██║  ██║    ███████║╚██████╗██║███████║███████║╚██████╔╝██║  ██║███████║""",
                                         """╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝    ╚═╝     ╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝ ╚═════╝╚═╝╚══════╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝""",
                                         " " };
-
-
-
-
-
-
-    for (int i = 0; i < sound1.Count; i++)
+    List<string> rock = new List<string> {
+        """██████╗  ██████╗  ██████╗██╗  ██╗""",
+        """██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝""",
+        """██████╔╝██║   ██║██║     █████╔╝ """,
+        """██╔══██╗██║   ██║██║     ██╔═██╗ """,
+        """██║  ██║╚██████╔╝╚██████╗██║  ██╗""",
+        """╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝""",
+        };
+    List<string> paper = new List<string>
     {
-        Console.WriteLine(text[i * 2]);
-        Console.WriteLine(text[i * 2 + 1]);
-        Console.Beep(sound1[i], sound2[i]);
+        """██████╗  █████╗ ██████╗ ███████╗██████╗""",
+        """██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗""",
+        """██████╔╝███████║██████╔╝█████╗  ██████╔╝""",
+        """██╔═══╝ ██╔══██║██╔═══╝ ██╔══╝  ██╔══██╗""",
+        """██║     ██║  ██║██║     ███████╗██║  ██║""",
+        """╚═╝     ╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝""",
+    };
+    List<string> scissors = new List<string>
+    {   
+        """███████╗ ██████╗██╗███████╗███████╗ ██████╗ ██████╗ ███████╗""",
+        """██╔════╝██╔════╝██║██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝""",
+        """███████╗██║     ██║███████╗███████╗██║   ██║██████╔╝███████╗""",
+        """╚════██║██║     ██║╚════██║╚════██║██║   ██║██╔══██╗╚════██║""",
+        """███████║╚██████╗██║███████║███████║╚██████╔╝██║  ██║███████║""",
+        """╚══════╝ ╚═════╝╚═╝╚══════╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝""",
+    };
+
+
+    if (Console.WindowWidth <61 || Console.WindowHeight <8)
+    {
+        Console.Clear();
+        Console.WriteLine("Please resize the window to at least 61x20.");
+        Console.WriteLine("So the characters below are in one line.");
+        Console.WriteLine("Also make sure your terminal supports ANSI escape codes for colors.");
+        Rowcolor.Yellow("=============================================================");
+        Console.WriteLine("or if you don't want to, press any key to exit...");
+        while (Console.WindowWidth < 61 || Console.WindowHeight < 8)
+            if (Console.KeyAvailable)
+            {
+            Environment.Exit(0);
+        }
+        Console.Clear();
+        
+    }
+    if (Console.WindowWidth < 150)
+    {
+        for (int i = 0; i < sound1.Count; i++)
+            {
+            if (i == 0)
+            {
+                Console.Beep(sound1[i], sound2[i]);
+                continue;
+            }
+            int line = i-1;
+
+            Console.SetCursorPosition(0, line * 2);
+            Console.WriteLine(rock[line * 2]);
+            Console.WriteLine(rock[line * 2 + 1]);
+
+            Console.SetCursorPosition(0, 6 + line * 2);
+            Console.WriteLine(paper[line * 2]);
+            Console.WriteLine(paper[line * 2 + 1]);
+
+            Console.SetCursorPosition(0, 12 + line * 2);
+            Console.WriteLine(scissors[line * 2]);
+            Console.WriteLine(scissors[line * 2 + 1]);
+
+            Console.Beep(sound1[i], sound2[i]);
+            }
+    }
+    else
+    {
+        for (int i = 0; i < sound1.Count; i++)
+            {
+            Console.WriteLine(text[i * 2]);
+            Console.WriteLine(text[i * 2 + 1]);
+            Console.Beep(sound1[i], sound2[i]);
+            }
     }
     Console.Beep(775, 800);
 }
@@ -38,10 +105,11 @@ static int Mode()
 {
     int pos = 0;
     string keypress = "";
+    Console.Clear();
     while (true)
     {
 
-        Console.Clear();
+        Console.SetCursorPosition(0, 0);
         Console.WriteLine("""                                                                                                                          
 ┌──────────────────────────────────┐
 │     ROCK - PAPER - SCISSORS      │
@@ -51,21 +119,21 @@ static int Mode()
         if (pos == 0)
         {
             Rowcolor.Yellow("            > [ T3P ] <");
-            Rowcolor.White("              [ T5P ] ");
-            Rowcolor.White("           [ FREE PLAY ] ");
+            Rowcolor.White("              [ T5P ]  ");
+            Rowcolor.White("           [ FREE PLAY ]  ");
         }
 
         if (pos == 1)
         {
-            Rowcolor.White("              [ T3P ] ");
+            Rowcolor.White("              [ T3P ]  ");
             Rowcolor.Yellow("            > [ T5P ] <");
-            Rowcolor.White("           [ FREE PLAY ] ");
+            Rowcolor.White("           [ FREE PLAY ]  ");
         }
 
         if (pos == 2)
         {
-            Rowcolor.White("              [ T3P ] ");
-            Rowcolor.White("              [ T5P ] ");
+            Rowcolor.White("              [ T3P ]  ");
+            Rowcolor.White("              [ T5P ]  ");
             Rowcolor.Yellow("         > [ FREE PLAY ] <");
         }
 
@@ -111,26 +179,26 @@ static async Task Loader()
 {
     string[] tips =
     [
-        "TIP: 100% of players who choose Paper fear scissors.",
-            "TIP: If you keep losing, try picking a different option.",
-            "TIP: Scissors is technically two knives fastened together.",
-            "TIP: Winning gives you a higher win count than losing.",
-            "TIP: Paper is made from trees. Trees beat rock in nature (eventually).",
-            "TIP: If you keep losing, blame the garbage collector.",
-            "TIP: Paper covers Rock, but nobody knows how that actually damages the Rock.",
+            "TIP: 100% of players who choose Paper fear scissors.                                               ",
+            "TIP: If you keep losing, try picking a different option.                                           ",
+            "TIP: Scissors is technically two knives fastened together.                                         ",
+            "TIP: Winning gives you a higher win count than losing.                                             ",
+            "TIP: Paper is made from trees. Trees beat rock in nature (eventually).                             ",
+            "TIP: If you keep losing, blame the garbage collector.                                              ",
+            "TIP: Paper covers Rock, but nobody knows how that actually damages the Rock.                       ",
             "TIP: Remember to drink water while waiting as long as 10 seconds for this loading screen to finish.",
-            "TIP: Maybe it's not your fault, have you tried buying a better gaming chair?",
-            "TIP: Cigánygyerek isnt a valid option",
-            "TIP: Compared to Csokonai, you are nothing",
-            "TIP: This is an Easter Egg",
+            "TIP: Maybe it's not your fault, have you tried buying a better gaming chair?                       ",
+            "TIP: Cigánygyerek isnt a valid option.                                                             ",
+            "TIP: Compared to Csokonai, you are nothing!                                                        ",
+            "TIP: This is an Easter Egg.                                                                        ",
 
 
         ];
     string[] dots = [
-        ".",
-            "..",
-            "...",
-            "....",
+            ".    ",
+            "..   ",
+            "...  ",
+            ".... ",
             "....."
     ];
     int dotnum = 0;
@@ -138,18 +206,20 @@ static async Task Loader()
     int tipnum = Random.Shared.Next(0, tips.Length);
     int dottime = 300; // Must be divisible by 3000
     int loadtime = Random.Shared.Next(6000, 11000);
-
+    Console.Clear();
     while (true)
     {
-        Console.Clear();
+
         dotnum++;
         if (dotnum > 4)
         {
             dotnum = 0;
         }
+        Console.SetCursorPosition(0, 0);
         Console.WriteLine($"Loading{dots[dotnum]}");
         if (mscounter % 3000 == 0)
         {
+            Console.SetCursorPosition(0, 1);
             tipnum = Random.Shared.Next(0, tips.Length);
         }
         Console.WriteLine(tips[tipnum]);
@@ -204,7 +274,7 @@ async Task MainGame(int modechoice)
     {
         while (true)
         {
-            Console.Clear();
+            Console.SetCursorPosition(0, 0);
 
 
             Console.WriteLine($"Rock Paper Scissors...            [Bot: {bscore} || You: {pscore}]");
@@ -281,6 +351,11 @@ async Task MainGame(int modechoice)
         Console.WriteLine($"Bot choice: {elements[botch]}");
         Console.WriteLine($"Press any key to continue or Q to exit");
         char exit = Console.ReadKey(true).KeyChar;
+        for (int i = 2; i < 5; i++)
+        {
+            Console.SetCursorPosition(0, i);
+            Console.WriteLine("                                        ");
+        }
 
         if (modechoice == 0 && (bscore == 3 || pscore == 3))
         {
@@ -363,51 +438,51 @@ void stats()
     }
     else
     {
-        
-    
-    Console.WriteLine("Game results:");
-    for (int i = 0; i < outcome.Outcomes.Count; i++)
-    {
-        Console.WriteLine(outcome.Outcomes[i]);
-    }
-    Console.WriteLine();
-    Console.WriteLine("Press any key to exit to main menu or Delete to clear stats...");
-    ConsoleKey key = Console.ReadKey(true).Key;
-    if (key == ConsoleKey.Delete)
-    {
-        Console.Clear();
-        Console.Beep(220, 400);
-        Rowcolor.DarkRed("Don't run from your past!");
-        Rowcolor.Red("[ Press 'Delete' to Accept Oblivion ]");
-        Rowcolor.Gray("[ Press 'Any other button' to Face It ]");
-        key = Console.ReadKey(true).Key;
+
+
+        Console.WriteLine("Game results:");
+        for (int i = 0; i < outcome.Outcomes.Count; i++)
+        {
+            Console.WriteLine(outcome.Outcomes[i]);
+        }
+        Console.WriteLine();
+        Console.WriteLine("Press any key to exit to main menu or Delete to clear stats...");
+        ConsoleKey key = Console.ReadKey(true).Key;
         if (key == ConsoleKey.Delete)
         {
-            outcome.Outcomes.Clear();
-            File.WriteAllText("stats.json", JsonSerializer.Serialize(outcome));
             Console.Clear();
-            Console.Beep(180, 400);
-            Task.Delay(600).Wait();
-            Console.Write("Now ");
-            Task.Delay(600).Wait();
-            Console.Write("go. ");
-            Task.Delay(1000).Wait();
-            Console.Write("Pretend, ");
-            Task.Delay(600).Wait();
-            Console.Write("it ");
-            Task.Delay(600).Wait();
-            Console.Write("never ");
-            Task.Delay(600).Wait();
-            Console.Write("happened.");
-            Task.Delay(1500).Wait();
+            Console.Beep(220, 400);
+            Rowcolor.DarkRed("Don't run from your past!");
+            Rowcolor.Red("[ Press 'Delete' to Accept Oblivion ]");
+            Rowcolor.Gray("[ Press 'Any other button' to Face It ]");
+            key = Console.ReadKey(true).Key;
+            if (key == ConsoleKey.Delete)
+            {
+                outcome.Outcomes.Clear();
+                File.WriteAllText("stats.json", JsonSerializer.Serialize(outcome));
+                Console.Clear();
+                Console.Beep(180, 400);
+                Task.Delay(600).Wait();
+                Console.Write("Now ");
+                Task.Delay(600).Wait();
+                Console.Write("go. ");
+                Task.Delay(1000).Wait();
+                Console.Write("Pretend, ");
+                Task.Delay(600).Wait();
+                Console.Write("it ");
+                Task.Delay(600).Wait();
+                Console.Write("never ");
+                Task.Delay(600).Wait();
+                Console.Write("happened.");
+                Task.Delay(1500).Wait();
+            }
+            else
+            {
+                Console.Beep(523, 80);
+                Console.Beep(659, 120);
+            }
         }
         else
-        {
-            Console.Beep(523, 80);
-            Console.Beep(659, 120);
-        }
-    }
-    else
         {
             Console.Beep(784, 150);
         }
@@ -421,11 +496,11 @@ void MainMenu()
 {
     int pos = 0;
     string keypress = "";
-
+    Console.Clear();
     while (true)
     {
 
-        Console.Clear();
+        Console.SetCursorPosition(0, 0);
         Console.WriteLine("""                                                                                                                          
 ┌──────────────────────────────────┐
 │     ROCK - PAPER - SCISSORS      │
@@ -435,21 +510,21 @@ void MainMenu()
         if (pos == 0)
         {
             Rowcolor.Yellow("          > [ P L A Y ] < ");
-            Rowcolor.White("           [ S T A T S ] ");
-            Rowcolor.White("            [ E X I T ] ");
+            Rowcolor.White("           [ S T A T S ]  ");
+            Rowcolor.White("            [ E X I T ]  ");
         }
 
         if (pos == 1)
         {
-            Rowcolor.White("            [ P L A Y ] ");
+            Rowcolor.White("            [ P L A Y ]  ");
             Rowcolor.Yellow("         > [ S T A T S ] <");
-            Rowcolor.White("            [ E X I T ] ");
+            Rowcolor.White("            [ E X I T ]  ");
         }
 
         if (pos == 2)
         {
-            Rowcolor.White("            [ P L A Y ] ");
-            Rowcolor.White("           [ S T A T S ] ");
+            Rowcolor.White("            [ P L A Y ]  ");
+            Rowcolor.White("           [ S T A T S ]  ");
             Rowcolor.Yellow("          > [ E X I T ] <");
         }
 
@@ -493,6 +568,7 @@ void MainMenu()
         if (pos == 1 && keypress == "Enter")
         {
             stats();
+            Console.Clear();
         }
         if (pos == 2 && keypress == "Enter")
         {
@@ -516,7 +592,7 @@ if (File.Exists(statfilelocation))
 
 int modechoice = 0;
 
-Console.SetWindowSize(150, 30);
+// Console.SetWindowSize(150, 30);
 BootAnimation();
 while (true)
 {

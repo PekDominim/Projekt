@@ -1,6 +1,5 @@
 # ROCK PAPER SCISSORS
-## ❗️❗️❗️DISCLAIMER❗️❗️❗️
-Visual Studio does not allow resizing of the terminal. This may cause issues depending on your monitor size, such as not displaying the boot animation properly. Other parts of the program work fine, but extensive testing was not conducted due to a lack of resources, so you may experience unintended behavior. For the best experience, please use VS Code in full screen until the issue is resolved.
+
 ## Description
 Indeed, It's Rock Paper Scissors
 
@@ -29,11 +28,13 @@ Indeed, It's Rock Paper Scissors
 ## Features:
 * 3 whole game modes:
   * T3P: First to 3 points
-  * T5P?: First to 5 points
+  * T5P: First to 5 points
   * Free Play: As the name says
 * Intuitive and User-friendly UI
 * Statistics: The game saves your results (and keeps it)
 * ...and much more...
+
+
 
 ## Written...
 - for Win10 (64bit)
