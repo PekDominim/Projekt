@@ -1,4 +1,6 @@
 # ROCK PAPER SCISSORS
+## ❗️❗️❗️DISCLAIMER❗️❗️❗️
+Visual Studio does not allow resizing of the terminal. This may cause issues depending on your monitor size, such as not displaying the boot animation properly. Other parts of the program work fine, but extensive testing was not conducted due to a lack of resources, so you may experience unintended behavior. For the best experience, please use VS Code in full screen until the issue is resolved.
 ## Description
 Indeed, It's Rock Paper Scissors
 
